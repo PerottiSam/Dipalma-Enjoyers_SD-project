@@ -1,13 +1,13 @@
 package it.unimib.sd2024;
 
 import java.net.*;
-import java.util.concurrent.ConcurrentHashMap;
 
-import javax.json.bind.Jsonb;
-import javax.json.bind.JsonbBuilder;
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
 
 import java.io.*;
-import java.time.LocalDate;
+
 
 /**
  * Classe principale in cui parte il database.
@@ -34,7 +34,6 @@ public class Main {
         } finally {
             server.close();
         }
-        */
     }
 
     /**
@@ -53,10 +52,31 @@ public class Main {
                 var in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
                 String inputLine = in.readLine();
+                String[] parts = inputLine.split(" ");
+                String command = parts[0];
 
-                switch (inputLine) {
-                    case "ciao":
-                        out.println("ciaoooo");
+                switch (command) {
+                    case "GET":
+                        switch (parts[1]) {
+                            case "domains":
+                                JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
+                            
+                                for (Document value : Database.domainsCollection.values()) {
+                                    jsonArrayBuilder.add(value.getJsonObject());
+                                }
+
+                                // Creazione di un JsonObject per contenere il JsonArray
+                                JsonObject combinedJson = Json.createObjectBuilder()
+                                    .add("domains", jsonArrayBuilder)
+                                    .build();
+                                
+                                out.println(combinedJson.toString());
+                                out.println("END");
+                                break;
+                        
+                            default:
+                                break;
+                        }
                         break;
                 
                     default:

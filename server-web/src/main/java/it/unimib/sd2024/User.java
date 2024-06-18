@@ -2,6 +2,7 @@ package it.unimib.sd2024;
 
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.Objects;
 
 
 public class User{
@@ -11,20 +12,16 @@ public class User{
     private LocalDate bday;
     private HashMap<Integer, Order> orders;
 
+    public User() {
+    }
 
-    public User(String email, String name, String surname, LocalDate bday) {
+    public User(String email, String name, String surname, LocalDate bday, HashMap<Integer,Order> orders) {
         this.email = email;
         this.name = name;
         this.surname = surname;
         this.bday = bday;
+        this.orders = orders;
     }
-
-    public User(String email, String name, String surname) {
-        this.email = email;
-        this.name = name;
-        this.surname = surname;
-    }
-
 
     public String getEmail() {
         return this.email;
@@ -58,18 +55,13 @@ public class User{
         this.bday = bday;
     }
 
-    public void addOrder(Order order){
-        orders.put(order.getId(), order);
+    public HashMap<Integer,Order> getOrders() {
+        return this.orders;
     }
 
     public void setOrders(HashMap<Integer,Order> orders) {
         this.orders = orders;
     }
-
-    public HashMap<Integer,Order> getOrders() {
-        return this.orders;
-    }
-
 
     @Override
     public String toString() {
@@ -80,6 +72,5 @@ public class User{
             ", bday='" + getBday() + "'" +
             ", orders='" + getOrders() + "'" +
             "}";
-    }
-
+    }    
 }

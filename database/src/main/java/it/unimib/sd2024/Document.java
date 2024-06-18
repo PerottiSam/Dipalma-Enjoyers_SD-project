@@ -11,6 +11,13 @@ public class Document{
     private String id;
     private String jsonData;
 
+
+    public Document(String id, String jsonData) {
+        this.id = id;
+        this.jsonData = jsonData;
+    }
+    
+
     public String getId() {
         return this.id;
     }

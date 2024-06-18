@@ -52,7 +52,7 @@ public class DomainsResource{
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Map getDomains() {
-        
+    public String getDomains() {
+        return sendMessageToDB("GET domains");
     }
 }

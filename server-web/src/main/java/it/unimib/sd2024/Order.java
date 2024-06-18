@@ -1,6 +1,7 @@
 package it.unimib.sd2024;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Order {
     private int id;
@@ -10,6 +11,9 @@ public class Order {
     private LocalDate orderDate;
 
 
+    public Order() {
+    }
+
     public Order(int id, String domain, Boolean registration, double paid, LocalDate orderDate) {
         this.id = id;
         this.domain = domain;
@@ -17,7 +21,6 @@ public class Order {
         this.paid = paid;
         this.orderDate = orderDate;
     }
-
 
     public int getId() {
         return this.id;
@@ -36,6 +39,10 @@ public class Order {
     }
 
     public Boolean isRegistration() {
+        return this.registration;
+    }
+
+    public Boolean getRegistration() {
         return this.registration;
     }
 
@@ -59,7 +66,6 @@ public class Order {
         this.orderDate = orderDate;
     }
 
-
     @Override
     public String toString() {
         return "{" +
@@ -69,6 +75,5 @@ public class Order {
             ", paid='" + getPaid() + "'" +
             ", orderDate='" + getOrderDate() + "'" +
             "}";
-    }
-
+    }    
 }
