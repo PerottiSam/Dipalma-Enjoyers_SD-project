@@ -1,7 +1,13 @@
 package it.unimib.sd2024;
 
 import java.net.*;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.json.bind.Jsonb;
+import javax.json.bind.JsonbBuilder;
+
 import java.io.*;
+import java.time.LocalDate;
 
 /**
  * Classe principale in cui parte il database.
@@ -15,7 +21,7 @@ public class Main {
     /**
      * Avvia il database e l'ascolto di nuove connessioni.
      */
-    public static void startServer() throws IOException {
+    public static void startServer() throws IOException { 
         var server = new ServerSocket(PORT);
 
         System.out.println("Database listening at localhost:" + PORT);
@@ -28,6 +34,7 @@ public class Main {
         } finally {
             server.close();
         }
+        */
     }
 
     /**
@@ -45,14 +52,15 @@ public class Main {
                 var out = new PrintWriter(client.getOutputStream(), true);
                 var in = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
-                String inputLine;
+                String inputLine = in.readLine();
 
-                while ((inputLine = in.readLine()) != null) {
-                    if (".".equals(inputLine)) {
-                        out.println("bye");
+                switch (inputLine) {
+                    case "ciao":
+                        out.println("ciaoooo");
                         break;
-                    }
-                    out.println(inputLine);
+                
+                    default:
+                        break;
                 }
 
                 in.close();
