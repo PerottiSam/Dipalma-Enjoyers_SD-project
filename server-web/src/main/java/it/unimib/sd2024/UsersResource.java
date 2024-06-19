@@ -10,8 +10,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import it.unimib.sd2024.entities.Domain;
-import it.unimib.sd2024.entities.User;
+import it.unimib.sd2024.entities.*;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbException;
@@ -27,58 +26,42 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
-@Path("domains")
-public class DomainsResource{
+@Path("users")
+public class UsersResource{
     /*
-     * Implementa GET "/domains".
+     * Implementa GET "/users".
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public String getDomains() {
-        return DBConnectionHandler.sendMessageToDB("GET domains");
+    public String getUsers() {
+        return DBConnectionHandler.sendMessageToDB("GET users");
     }
 
-	/**
-     * Implementazione di GET "/domains/{domainName}". 
-	 * Dove id è la stringa rappresentante il dominio stesso
-     */
-    @Path("/{domainName}")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getDomain(@PathParam("domainName") String domainName) {
-		String response = DBConnectionHandler.sendMessageToDB("GET domain " + domainName);
-
-        if(response.equals("ERROR NOT_FOUND")){
-			//Questa casistica viene usata anche per registrare un dominio
-			//e vedere se non esiste già
-			return Response.status(Status.NOT_FOUND).build();
-		}else{
-			return Response.ok(response).build();
-		}
-    }
-
-	/**
-     * Implementazione di POST "/domains".
+    /**
+     * Implementazione di POST "/users".
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addDomain(Domain domain) {
+    public Response addUser(User user) {
         // Create Jsonb and serialize
         Jsonb jsonb = JsonbBuilder.create();
+
+        // Bisogna inizializzare una mappa di orders vuota.
+        user.setOrders(new HashMap<Integer, Order>());
         
-        String response = DBConnectionHandler.sendMessageToDB("CREATE domain " + domain.getDomainName() + 
-            " " + jsonb.toJson(domain));
+        String response = DBConnectionHandler.sendMessageToDB("CREATE user " + user.getEmail() + 
+            " " + jsonb.toJson(user));
 
         if (response.equals("OK")){
             try {
-                var uri = new URI("/domains/" + domain.getDomainName());
+                var uri = new URI("/users/" + user.getEmail());
                 return Response.created(uri).build();
             } catch (URISyntaxException e) {
                 System.out.println(e);
                 return Response.serverError().build();
             }
         }else{
-            //Il dominio è già registrato
+            //Esiste già un utente con la email inserita
             return Response.status(Status.CONFLICT).build();
         }
     }

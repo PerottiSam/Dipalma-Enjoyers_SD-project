@@ -1,4 +1,4 @@
-package it.unimib.sd2024.Entities;
+package it.unimib.sd2024.entities;
 
 import java.time.LocalDate;
 import java.util.HashMap;

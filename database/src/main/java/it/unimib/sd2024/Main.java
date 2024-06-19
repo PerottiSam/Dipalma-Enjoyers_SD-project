@@ -67,9 +67,26 @@ public class Main {
                                 break;
 
                             case "domain":
-                            out.println(Database.getDomainWithUser(parts[2]));
-                            out.println("END");
-                            break;
+                                out.println(Database.getDomainWithUser(parts[2]));
+                                out.println("END");
+                                break;
+
+                            case "users":
+                                out.println(Database.getAllUsers());
+                                out.println("END");
+                                break;
+                        
+                            default:
+                                break;
+                        }
+                        break;
+
+                    case "CREATE":
+                        switch (parts[1]) {
+                            case "user":
+                                out.println(Database.addUser(parts[2], parts[3]));
+                                out.println("END");
+                                break;
                         
                             default:
                                 break;

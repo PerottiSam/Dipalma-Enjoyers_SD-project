@@ -32,5 +32,24 @@ public class DBConnectionHandler {
         }
         return response;
 	}
+
+    public static String sendMessageToDB(String message) {
+	    try {
+	        Socket socket = new Socket("localhost", 3030);
+	        String response = "";
+			try {
+				response = sendMessage(socket, message);
+			} catch (IOException e) {
+				System.err.println("Errore durante l'invio messaggio al DB: " + e.getMessage());
+			}
+	       
+            socket.close();
+
+	        return response;
+	    } catch (Exception e) {
+	    	System.err.println("Errore durante la connessione al DB: " + e.getMessage());
+	        return "NULL";
+	    }
+	}
 }
 

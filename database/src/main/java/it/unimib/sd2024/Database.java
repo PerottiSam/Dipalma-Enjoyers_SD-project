@@ -69,6 +69,20 @@ public class Database {
         return combinedJson.toString();
     }
 
+    public static String getAllUsers(){
+        JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
+                            
+        for (Document value : usersCollection.values()) {
+            jsonArrayBuilder.add(removeAttribute(value.getJsonObject(), "orders"));
+        }
+
+        // Creazione di un JsonObject per contenere il JsonArray
+        JsonObject combinedJson = Json.createObjectBuilder()
+            .add("users", jsonArrayBuilder)
+            .build();
+        
+        return combinedJson.toString();
+    }
 
 
     public static String getDomainWithUser(String domainName){
@@ -90,6 +104,16 @@ public class Database {
                     .add("domain-user", jsonArrayBuilder)
                     .build()
                     .toString();
+        }
+    }
+
+    public static String addUser(String userEmail, String jsonStringUser){
+        if(!usersCollection.containsKey(userEmail)){
+            usersCollection.put(userEmail, 
+                new Document(userEmail, jsonStringUser));
+            return "OK";
+        }else{
+            return "ERROR USER_EMAIL_CONFLICT";
         }
     }
 }
