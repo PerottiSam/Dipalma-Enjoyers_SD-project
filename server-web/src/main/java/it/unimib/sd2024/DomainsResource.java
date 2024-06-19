@@ -55,4 +55,25 @@ public class DomainsResource{
     public String getDomains() {
         return sendMessageToDB("GET domains");
     }
+
+	/**
+     * Implementazione di GET "/domains/{domainName}". 
+	 * Dove id è la stringa rappresentante il dominio stesso
+     */
+    @Path("/{domainName}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getDomain(@PathParam("domainName") String domainName) {
+		String response = sendMessageToDB("GET domain " + domainName);
+
+        if(response.equals("ERROR NOT_FOUND")){
+			//Questa casistica viene usata anche per registrare un dominio
+			//e vedere se non esiste già
+			return Response.status(Status.NOT_FOUND).build();
+		}else{
+			return Response.ok(response).build();
+		}
+    }
+
+	
 }

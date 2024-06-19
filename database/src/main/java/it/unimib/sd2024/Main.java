@@ -1,10 +1,13 @@
 package it.unimib.sd2024;
 
 import java.net.*;
+import java.time.LocalDate;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
+import javax.json.bind.Jsonb;
+import javax.json.bind.JsonbBuilder;
 
 import java.io.*;
 
@@ -59,20 +62,14 @@ public class Main {
                     case "GET":
                         switch (parts[1]) {
                             case "domains":
-                                JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
-                            
-                                for (Document value : Database.domainsCollection.values()) {
-                                    jsonArrayBuilder.add(value.getJsonObject());
-                                }
-
-                                // Creazione di un JsonObject per contenere il JsonArray
-                                JsonObject combinedJson = Json.createObjectBuilder()
-                                    .add("domains", jsonArrayBuilder)
-                                    .build();
-                                
-                                out.println(combinedJson.toString());
+                                out.println(Database.getAllDomains());
                                 out.println("END");
                                 break;
+
+                            case "domain":
+                            out.println(Database.getDomainWithUser(parts[2]));
+                            out.println("END");
+                            break;
                         
                             default:
                                 break;
