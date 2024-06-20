@@ -9,17 +9,15 @@ public class User{
     private String email; // E' univoca, usata come identificativo
     private String name;
     private String surname;
-    private LocalDate bday;
     private HashMap<Integer, Order> orders;
 
     public User() {
     }
 
-    public User(String email, String name, String surname, LocalDate bday, HashMap<Integer,Order> orders) {
+    public User(String email, String name, String surname, HashMap<Integer,Order> orders) {
         this.email = email;
         this.name = name;
         this.surname = surname;
-        this.bday = bday;
         this.orders = orders;
     }
 
@@ -47,14 +45,6 @@ public class User{
         this.surname = surname;
     }
 
-    public LocalDate getBday() {
-        return this.bday;
-    }
-
-    public void setBday(LocalDate bday) {
-        this.bday = bday;
-    }
-
     public HashMap<Integer,Order> getOrders() {
         return this.orders;
     }
@@ -69,7 +59,6 @@ public class User{
             " email='" + getEmail() + "'" +
             ", name='" + getName() + "'" +
             ", surname='" + getSurname() + "'" +
-            ", bday='" + getBday() + "'" +
             ", orders='" + getOrders() + "'" +
             "}";
     }    

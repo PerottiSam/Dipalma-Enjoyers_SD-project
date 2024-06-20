@@ -19,9 +19,9 @@ public class Database {
         domainsCollection.put("sam.it", new Document("sam.it", "{\"domainName\":\"sam.it\",\"expirationDate\":\"2007-12-10\",\"registrationDate\":\"2003-12-13\",\"userEmail\":\"samper@gmail.com\"}"));
         domainsCollection.put("tigre.it", new Document("tigre.it", "{\"domainName\":\"tigre.it\",\"expirationDate\":\"2007-12-10\",\"registrationDate\":\"2003-12-13\",\"userEmail\":\"tigre@gmail.com\"}"));
 
-        usersCollection.put("samper@gmail.com", new Document("samper@gmail.com", "{\"bday\":\"2003-08-20\",\"email\":\"samper@gmail.com\",\"name\":\"Samuele\",\"surname\":\"Perotti\"}"));
-        usersCollection.put("pippo@gmail.com", new Document("pippo@gmail.com", "{\"bday\":\"1971-08-20\",\"email\":\"pippo@gmail.com\",\"name\":\"Pippo\",\"surname\":\"Perotti\"}"));
-        usersCollection.put("tigre@gmail.com", new Document("tigre@gmail.com", "{\"bday\":\"2013-07-19\",\"email\":\"tigre@gmail.com\",\"name\":\"Tigre\",\"surname\":\"Perotti\"}"));
+        usersCollection.put("samper@gmail.com", new Document("samper@gmail.com", "{\"email\":\"samper@gmail.com\",\"name\":\"Samuele\",\"surname\":\"Perotti\"}"));
+        usersCollection.put("pippo@gmail.com", new Document("pippo@gmail.com", "{\"email\":\"pippo@gmail.com\",\"name\":\"Pippo\",\"surname\":\"Perotti\"}"));
+        usersCollection.put("tigre@gmail.com", new Document("tigre@gmail.com", "{\"email\":\"tigre@gmail.com\",\"name\":\"Tigre\",\"surname\":\"Perotti\"}"));
     }
 
     public static List<Document> findDocumentsByAttribute(ConcurrentHashMap<String, Document> collection, String attribute, String value) {
@@ -101,7 +101,7 @@ public class Database {
             jsonArrayBuilder.add(removeAttribute(user.getJsonObject(), "orders"));
             
             return Json.createObjectBuilder()
-                    .add("domain-user", jsonArrayBuilder)
+                    .add("domainUser", jsonArrayBuilder)
                     .build()
                     .toString();
         }
