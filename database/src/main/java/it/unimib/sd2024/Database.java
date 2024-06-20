@@ -13,6 +13,7 @@ import javax.json.JsonValue;
 public class Database {
     public static ConcurrentHashMap<String, Document> domainsCollection = new ConcurrentHashMap<>();
     public static ConcurrentHashMap<String, Document> usersCollection = new ConcurrentHashMap<>();
+    public static ConcurrentHashMap<String, Document> ordersCollection = new ConcurrentHashMap<>();
 
     static{
         domainsCollection.put("pippo.it", new Document("pippo.it", "{\"domainName\":\"pippo.it\",\"expirationDate\":\"2007-12-10\",\"registrationDate\":\"2003-12-13\",\"userEmail\":\"pippo@gmail.com\"}"));
@@ -41,7 +42,7 @@ public class Database {
         return jsonValue != null ? jsonValue.toString() : null;
     }
 
-    // Metodo per rimuovere un attributo da un JsonObject (usato per rimuovere orders)
+    // Metodo per rimuovere un attributo da un JsonObject 
     private static JsonObject removeAttribute(JsonObject jsonObject, String attributeName) {
         JsonObjectBuilder builder = Json.createObjectBuilder();
 
@@ -72,13 +73,26 @@ public class Database {
     public static String getAllUsers(){
         JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
                             
-        for (Document value : usersCollection.values()) {
-            jsonArrayBuilder.add(removeAttribute(value.getJsonObject(), "orders"));
-        }
+        
 
         // Creazione di un JsonObject per contenere il JsonArray
         JsonObject combinedJson = Json.createObjectBuilder()
             .add("users", jsonArrayBuilder)
+            .build();
+        
+        return combinedJson.toString();
+    }
+
+    public static String getAllOrders(String userEmail){
+        JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
+        
+        for (Document value : findDocumentsByAttribute(ordersCollection, "userEmail", userEmail)) {
+            jsonArrayBuilder.add(value.getJsonObject());
+        }
+
+        // Creazione di un JsonObject per contenere il JsonArray
+        JsonObject combinedJson = Json.createObjectBuilder()
+            .add("orders", jsonArrayBuilder)
             .build();
         
         return combinedJson.toString();
@@ -98,7 +112,7 @@ public class Database {
             
             JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
             jsonArrayBuilder.add(domain.getJsonObject());
-            jsonArrayBuilder.add(removeAttribute(user.getJsonObject(), "orders"));
+            jsonArrayBuilder.add(user.getJsonObject());
             
             return Json.createObjectBuilder()
                     .add("domainUser", jsonArrayBuilder)
@@ -113,7 +127,7 @@ public class Database {
         if(user == null){
             return "ERROR NOT_FOUND";
         }else{
-            return removeAttribute(user.getJsonObject(), "orders").toString();
+            return user.getJsonObject().toString();
         }
     }
 
@@ -138,11 +152,16 @@ public class Database {
     }
 
     public static String addDomain(String domainName, String jsonStringDomain){
-        
-            domainsCollection.put(domainName, 
-                new Document(domainName, jsonStringDomain));
+        Document doc =  new Document(domainName, jsonStringDomain);
+        domainsCollection.put(domainName, doc);
 
-            //TODO aggiungerlo negli ordini dell'utente
-            return "OK";
+        return "OK";
+    }
+
+    public static String addOrder(String idOrder, String jsonStringOrder){
+        Document doc =  new Document(idOrder, jsonStringOrder);
+        ordersCollection.put(idOrder, doc);
+
+        return "OK";
     }
 }

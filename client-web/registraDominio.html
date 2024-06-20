@@ -148,9 +148,29 @@
         let response = await postDomain(domain);
 
         if(response === "OK"){
-          window.location.href = 'index.html';
+            //Ora aggiungo l'ordine
+            let order = {
+                id: emailInput + "-" + Date.now(),
+                userEmail: emailInput,
+                domain: domainName,
+                registration: true,
+                paid: domainName.length,
+                orderDate: today
+            }
+
+            console.log(order);
+
+            let response = await postOrder(emailInput, order);
+
+            if(response === "OK"){
+                window.location.href = 'index.html';
+            }else{
+                document.getElementById("erroreTxt").innerText = "ERROR: " + response;
+            }
+
+            
         }else{
-          document.getElementById("erroreTxt").innerText = "ERROR: " + response;
+            document.getElementById("erroreTxt").innerText = "ERROR: " + response;
         }
       }
 

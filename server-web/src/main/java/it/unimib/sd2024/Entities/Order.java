@@ -4,7 +4,8 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class Order {
-    private int id;
+    private String id;
+    private String userEmail;
     private String domain;
     private Boolean registration; //true: Registration, false: Renewal
     private double paid;
@@ -14,20 +15,29 @@ public class Order {
     public Order() {
     }
 
-    public Order(int id, String domain, Boolean registration, double paid, LocalDate orderDate) {
+    public Order(String id, String userEmail, String domain, Boolean registration, double paid, LocalDate orderDate) {
         this.id = id;
+        this.userEmail = userEmail;
         this.domain = domain;
         this.registration = registration;
         this.paid = paid;
         this.orderDate = orderDate;
     }
 
-    public int getId() {
+    public String getId() {
         return this.id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
+    }
+
+    public String getUserEmail() {
+        return this.userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     public String getDomain() {
@@ -70,10 +80,13 @@ public class Order {
     public String toString() {
         return "{" +
             " id='" + getId() + "'" +
+            ", userEmail='" + getUserEmail() + "'" +
             ", domain='" + getDomain() + "'" +
             ", registration='" + isRegistration() + "'" +
             ", paid='" + getPaid() + "'" +
             ", orderDate='" + getOrderDate() + "'" +
             "}";
-    }    
+    }
+
+    
 }

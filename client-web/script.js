@@ -20,6 +20,21 @@ async function getDomains() {
     }   
 }
 
+async function getOrders(userEmail) {
+    const endpoint = `${API_URI}/users/` + userEmail + '/orders';
+
+    try {
+        let response = await fetch(endpoint);
+
+        if (!response.ok)
+            throw new Error(`Risposta GET "${endpoint}" con errore: ${response.status} ${response.statusText}`);
+
+        return await response.json();
+    } catch(error) {
+        onError(`Impossibile eseguire la richiesta GET "${endpoint}"`, error);
+    }   
+}
+
 
 async function getDomain(domainName, verbose) {
     const endpoint = `${API_URI}/domains/` + domainName + '?verbose=' + verbose;
@@ -82,6 +97,28 @@ async function postUser(user){
     
           if (!response.ok)
             return "An account already exists with this email";
+    
+          // Fa lo split e restituisce l'ultima sottostringa, che è l'ID.
+          return "OK";
+    } catch(error) {
+        onError(`Impossibile eseguire la richiesta POST "${endpoint}"`, error);
+    }
+}
+
+async function postOrder(userEmail, order){
+    const endpoint = `${API_URI}/users/` + encodeURIComponent(userEmail) + "/orders";
+
+    try {
+        const response = await fetch(endpoint, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(order)
+          });
+    
+          if (!response.ok)
+            throw error
     
           // Fa lo split e restituisce l'ultima sottostringa, che è l'ID.
           return "OK";

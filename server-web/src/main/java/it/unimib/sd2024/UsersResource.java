@@ -38,6 +38,16 @@ public class UsersResource{
         return DBConnectionHandler.sendMessageToDB("GET users");
     }
 
+    /*
+     * Implementa GET "/users".
+     */
+    @Path("/{email}/orders")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getOrders(@PathParam("email") String email) {
+        return DBConnectionHandler.sendMessageToDB("GET orders " + email);
+    }
+
     @Path("/{email}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -61,9 +71,6 @@ public class UsersResource{
     public Response addUser(User user) {
         // Create Jsonb and serialize
         Jsonb jsonb = JsonbBuilder.create();
-
-        // Bisogna inizializzare una mappa di orders vuota.
-        user.setOrders(new HashMap<Integer, Order>());
         
         String response = DBConnectionHandler.sendMessageToDB("CREATE user " + user.getEmail() + 
             " " + jsonb.toJson(user));
@@ -71,6 +78,34 @@ public class UsersResource{
         if (response.equals("OK")){
             try {
                 var uri = new URI("/users/" + user.getEmail());
+                return Response.created(uri).build();
+            } catch (URISyntaxException e) {
+                System.out.println(e);
+                return Response.serverError().build();
+            }
+        }else{
+            //Esiste già un utente con la email inserita
+            return Response.status(Status.CONFLICT).build();
+        }
+    }
+
+
+    /**
+     * Implementazione di POST "/users/{email}".
+     */
+    @Path("/{email}/orders")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addOrder(@PathParam("email") String email, Order order) {
+        // Create Jsonb and serialize
+        Jsonb jsonb = JsonbBuilder.create();
+        
+        String response = DBConnectionHandler.sendMessageToDB("CREATE order " + order.getId() + 
+            " " + jsonb.toJson(order));
+
+        if (response.equals("OK")){
+            try {
+                var uri = new URI("/users/" + email + "/orders/" + order.getId());
                 return Response.created(uri).build();
             } catch (URISyntaxException e) {
                 System.out.println(e);

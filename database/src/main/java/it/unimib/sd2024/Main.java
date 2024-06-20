@@ -81,6 +81,11 @@ public class Main {
                                 out.println("END");
                                 break;
 
+                            case "orders":
+                                out.println(Database.getAllOrders(parts[2]));
+                                out.println("END");
+                                break;
+
                             case "user":
                                 out.println(Database.getUser(parts[2]));
                                 out.println("END");
@@ -100,6 +105,11 @@ public class Main {
 
                             case "domain":
                                 out.println(Database.addDomain(parts[2], parts[3]));
+                                out.println("END");
+                                break;
+                            
+                            case "order":
+                                out.println(Database.addOrder(parts[2], parts[3]));
                                 out.println("END");
                                 break;
                         

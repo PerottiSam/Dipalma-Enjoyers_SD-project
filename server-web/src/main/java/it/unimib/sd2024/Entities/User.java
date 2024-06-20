@@ -9,16 +9,15 @@ public class User{
     private String email; // E' univoca, usata come identificativo
     private String name;
     private String surname;
-    private HashMap<Integer, Order> orders;
 
     public User() {
     }
 
-    public User(String email, String name, String surname, HashMap<Integer,Order> orders) {
+
+    public User(String email, String name, String surname) {
         this.email = email;
         this.name = name;
         this.surname = surname;
-        this.orders = orders;
     }
 
     public String getEmail() {
@@ -45,13 +44,6 @@ public class User{
         this.surname = surname;
     }
 
-    public HashMap<Integer,Order> getOrders() {
-        return this.orders;
-    }
-
-    public void setOrders(HashMap<Integer,Order> orders) {
-        this.orders = orders;
-    }
 
     @Override
     public String toString() {
@@ -59,7 +51,7 @@ public class User{
             " email='" + getEmail() + "'" +
             ", name='" + getName() + "'" +
             ", surname='" + getSurname() + "'" +
-            ", orders='" + getOrders() + "'" +
             "}";
-    }    
+    }
+    
 }
