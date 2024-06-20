@@ -1,4 +1,4 @@
-package it.unimib.sd2024.entities;
+package it.unimib.sd2024.Entities;
 
 import java.time.LocalDate;
 import java.util.Objects;

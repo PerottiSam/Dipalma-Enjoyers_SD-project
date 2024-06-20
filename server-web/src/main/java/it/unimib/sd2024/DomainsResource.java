@@ -13,8 +13,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import it.unimib.sd2024.entities.Domain;
-import it.unimib.sd2024.entities.User;
+import it.unimib.sd2024.Entities.Domain;
+import it.unimib.sd2024.Entities.User;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.json.bind.JsonbException;
