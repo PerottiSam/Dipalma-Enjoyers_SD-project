@@ -107,6 +107,26 @@ public class Database {
         }
     }
 
+    public static String getUser(String email){
+        Document user = usersCollection.get(email);
+
+        if(user == null){
+            return "ERROR NOT_FOUND";
+        }else{
+            return removeAttribute(user.getJsonObject(), "orders").toString();
+        }
+    }
+
+    public static String getDomainAttribute(String domainName, String attribute){
+        Document domain = domainsCollection.get(domainName);
+        
+        if(domain == null){
+            return "ERROR NOT_FOUND";
+        }else{
+            return getAttributeValue(domain.getJsonObject(), attribute).replaceAll("\"", "");
+        }
+    }
+
     public static String addUser(String userEmail, String jsonStringUser){
         if(!usersCollection.containsKey(userEmail)){
             usersCollection.put(userEmail, 
@@ -115,5 +135,14 @@ public class Database {
         }else{
             return "ERROR USER_EMAIL_CONFLICT";
         }
+    }
+
+    public static String addDomain(String domainName, String jsonStringDomain){
+        
+            domainsCollection.put(domainName, 
+                new Document(domainName, jsonStringDomain));
+
+            //TODO aggiungerlo negli ordini dell'utente
+            return "OK";
     }
 }

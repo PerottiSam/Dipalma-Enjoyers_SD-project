@@ -22,6 +22,7 @@ import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
@@ -35,6 +36,21 @@ public class UsersResource{
     @Produces(MediaType.APPLICATION_JSON)
     public String getUsers() {
         return DBConnectionHandler.sendMessageToDB("GET users");
+    }
+
+    @Path("/{email}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getDomain(@PathParam("email") String email) {
+		
+        String response = DBConnectionHandler.sendMessageToDB("GET user " + email);
+        
+        if(response.equals("ERROR NOT_FOUND")){
+            return Response.status(Status.NOT_FOUND).build();
+        }else{
+            return Response.ok(response).build();
+        }
+        
     }
 
     /**
