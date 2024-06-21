@@ -25,8 +25,7 @@
                 </div>
                 <div class="col-md-4">
                     <select class="form-select" id="selectDurata" required>
-                        <option selected>Per quanti anni</option>
-                        <option value="1">1 Anno</option>
+                        <option value="1" selected>1 Anno</option>
                         <option value="2">2 Anni</option>
                         <option value="3">3 Anni</option>
                         <option value="4">4 Anni</option>
@@ -44,11 +43,9 @@
                     </div>
                 </div>
             </di>
-            
-            
         </center>
     
-        <form style="width:800px; margin: 2rem auto;">
+        <form style="width:800px; margin: 2rem auto;" id="form">
             <div class="mb-3">
               <label for="exampleInputEmail1" class="form-label">Email address</label>
               <input type="email" class="form-control" id="emailInput" aria-describedby="emailHelp" required>
@@ -63,21 +60,21 @@
 
             <div class="input-group mb-3" style="margin-top: 1rem;">
                 <input type="text" class="form-control" placeholder="Numero carta di credito" required>
-              </div>
+            </div>
               
-              <div class="input-group mb-3">
+            <div class="input-group mb-3">
                 <input type="month" class="form-control" required>
                 <span class="input-group-text">-</span>
                 <input type="tel" class="form-control" placeholder="CVV" required maxlength="3">
-              </div>
+            </div>
               
-              <div class="input-group">
+            <div class="input-group">
                 <span class="input-group-text">Intestatario</span>
-                <input type="text" aria-label="First name" class="form-control" required>
-                <input type="text" aria-label="Last name" class="form-control" required>
+                <input id="cardName" type="text" aria-label="First name" class="form-control" required>
+                <input id="cardSurname" type="text" aria-label="Last name" class="form-control" required>
             </div>
             
-            <button id="registraDominio" type="button" class="btn btn-primary" style="margin-top: 1rem;">Registra dominio</button>
+            <button id="registraDominio" type="submit" class="btn btn-primary" style="margin-top: 1rem;">Registra dominio</button>
         </form>
     </div>
 
@@ -87,7 +84,8 @@
     
     <script src="script.js"></script>
     <script>
-      window.onload = init();
+        let price;
+        window.onload = init();
 
       async function procediAcquisto(){
         let domainName = document.getElementById("domainName").value;
@@ -96,7 +94,8 @@
 
         if(response === "DISPONIBILE"){
             var timerInterval = setInterval(startTimer, 1000);
-            document.getElementById("prezzo").innerText = "Prezzo: €" +domainName.length;
+            price = (domainName.length + 1);
+            document.getElementById("prezzo").innerText = "Prezzo: €" + price;
             document.getElementById("continuaBtn").disabled = true;
             document.getElementById("inputForm").style.display = "block";
             document.getElementById("erroreTxt").innerText = "";
@@ -110,17 +109,18 @@
 
         if(email){
             let response = await getUser(email);
-                
 
-                //Se è errore
-                if (typeof response === 'string' || response instanceof String){
-                    document.getElementById("erroreTxt").innerText = response;
-                }else{
-                    //Se è non errore
-                    document.getElementById("nameInput").value = response["name"];
-                    document.getElementById("surnameInput").value = response["surname"];
-                    document.getElementById("erroreTxt").innerText = "";
-                }
+            //Se è errore
+            if (typeof response === 'string' || response instanceof String){
+                document.getElementById("erroreTxt").innerText = response;
+            }else{
+                //Se è non errore
+                document.getElementById("nameInput").value = response["name"];
+                document.getElementById("surnameInput").value = response["surname"];
+                document.getElementById("cardName").value = response["name"];
+                document.getElementById("cardSurname").value = response["surname"];
+                document.getElementById("erroreTxt").innerText = "";
+            }
         }
       }
 
@@ -154,7 +154,7 @@
                 userEmail: emailInput,
                 domain: domainName,
                 registration: true,
-                paid: domainName.length,
+                paid: (domainName.length + parseInt(durata)),
                 orderDate: today
             }
 
@@ -174,6 +174,13 @@
         }
       }
 
+      async function changePrice(){
+        let anni = document.getElementById("selectDurata").value;
+        let domainName = document.getElementById("domainName").value;
+        price = (domainName.length + 1);
+        document.getElementById("prezzo").innerText = "Prezzo: €" + (domainName.length + parseInt(anni));
+      }
+
       async function init() {
         
         document.getElementById("continuaBtn")
@@ -186,9 +193,19 @@
                 ottieniNomeCognome();
             });
 
-        document.getElementById("registraDominio")
-            .addEventListener("click", () => {
-                registraDominio();
+            
+        document.getElementById('form')
+        .addEventListener('submit', event => {
+            event.preventDefault();
+            
+            registraDominio();
+        });
+
+        
+
+        document.getElementById("selectDurata")
+            .addEventListener('change', () => {
+                changePrice();
             });
       }
 

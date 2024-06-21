@@ -48,6 +48,16 @@ public class UsersResource{
         return DBConnectionHandler.sendMessageToDB("GET orders " + email);
     }
 
+    /*
+     * Implementa GET.
+     */
+    @Path("/{email}/domains")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getDomains(@PathParam("email") String email) {
+        return DBConnectionHandler.sendMessageToDB("GET domains " + email);
+    }
+
     @Path("/{email}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)

@@ -17,16 +17,16 @@
           <button type="button" class="btn btn-outline-dark" id="ordiniBtn">I miei ordini</button>
         </div>
         <div class="col">
-          &nbsp;
+          <button type="button" class="btn btn-outline-warning" id="registraDominioBtn">Registra un dominio</button>
         </div>
         <div class="col">
-          <button type="button" class="btn btn-outline-warning" id="registraDominioBtn">Registra un dominio</button>
+          <button type="button" class="btn btn-outline-info" id="mieiDominiBtn">I miei domini</button>
         </div>
       </div>
     </div>
 
     <div class="input-group" style="width:800px; margin: 3rem auto; margin-bottom: 0rem;">
-      <input type="text" class="form-control" placeholder="Cerca un dominio..." aria-label="Cerca un dominio..." aria-describedby="cercaDominioBtn" id="domainNameInput">
+      <input type="text" class="form-control" placeholder="Verifica disponibilità dominio" aria-label="Verifica disponibilità dominio" aria-describedby="cercaDominioBtn" id="domainNameInput">
       <button class="btn btn-outline-primary" type="button" id="cercaDominioBtn">Cerca</button>
       <button class="btn btn-outline-secondary" type="button" id="cancellaBtn">Cancella</button>
     </div>
@@ -165,6 +165,11 @@
         document.getElementById("registraDominioBtn")
           .addEventListener("click", () => {
             window.location.href = 'registraDominio.html';
+          });
+
+          document.getElementById("mieiDominiBtn")
+          .addEventListener("click", () => {
+            window.location.href = 'visualizzaDomini.html';
           });
       }
 

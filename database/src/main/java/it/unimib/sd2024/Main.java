@@ -62,8 +62,14 @@ public class Main {
                     case "GET":
                         switch (parts[1]) {
                             case "domains":
-                                out.println(Database.getAllDomains());
-                                out.println("END");
+                                if (parts.length == 2) {
+                                    out.println(Database.getAllDomains());
+                                    out.println("END");
+                                }else{ 
+                                    out.println(Database.getUserDomains(parts[2]));
+                                    out.println("END");
+                                }
+                                
                                 break;
 
                             case "domain":

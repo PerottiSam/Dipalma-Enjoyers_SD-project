@@ -20,6 +20,22 @@ async function getDomains() {
     }   
 }
 
+async function getUserDomains(userEmail) {
+    const endpoint = `${API_URI}/users/` + userEmail + '/domains';
+
+    try {
+        let response = await fetch(endpoint);
+
+        if (!response.ok)
+            throw new Error(`Risposta GET "${endpoint}" con errore: ${response.status} ${response.statusText}`);
+
+        return await response.json();
+    } catch(error) {
+        onError(`Impossibile eseguire la richiesta GET "${endpoint}"`, error);
+    }   
+}
+
+
 async function getOrders(userEmail) {
     const endpoint = `${API_URI}/users/` + userEmail + '/orders';
 

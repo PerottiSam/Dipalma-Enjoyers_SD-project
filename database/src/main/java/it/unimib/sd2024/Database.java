@@ -70,6 +70,21 @@ public class Database {
         return combinedJson.toString();
     }
 
+    public static String getUserDomains(String userEmail){
+        JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
+        
+        for (Document value : findDocumentsByAttribute(domainsCollection, "userEmail", userEmail)) {
+            jsonArrayBuilder.add(value.getJsonObject());
+        }
+
+        // Creazione di un JsonObject per contenere il JsonArray
+        JsonObject combinedJson = Json.createObjectBuilder()
+            .add("domains", jsonArrayBuilder)
+            .build();
+        
+        return combinedJson.toString();
+    }
+
     public static String getAllUsers(){
         JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
                             
