@@ -1,22 +1,28 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <title>Domains Service</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  </head>
-  <body data-server-no-reload>
-    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+
+<body data-server-no-reload>
+
     <center style="margin: 7rem auto; margin-bottom: 0rem;">
         <h3>Acquista un dominio</h3>
     </center>
 
     <div class="input-group" style="width:800px; margin: 3rem auto; margin-bottom: 0rem;">
+        <button type="button" class="btn btn-outline-success" id="homeBtn">Home</button>
+    </div>
+    <div class="input-group" style="width:800px; margin: 3rem auto; margin-bottom: 0rem;">
         <input type="text" class="form-control" placeholder="Inserisci il dominio da acquistare" id="domainName">
         <button class="btn btn-primary" type="button" id="continuaBtn">Continua</button>
     </div>
 
-    
+
     <div id="inputForm" style="display: none;">
         <center style="width:800px; margin: 1rem auto; margin-bottom: 0rem;">
             <di class="row g-3">
@@ -35,7 +41,7 @@
                         <option value="8">8 Anni</option>
                         <option value="9">9 Anni</option>
                         <option value="10">10 Anni</option>
-                      </select>
+                    </select>
                 </div>
                 <div class="col-md-4">
                     <div>
@@ -44,171 +50,187 @@
                 </div>
             </di>
         </center>
-    
+
         <form style="width:800px; margin: 2rem auto;" id="form">
             <div class="mb-3">
-              <label for="exampleInputEmail1" class="form-label">Email address</label>
-              <input type="email" class="form-control" id="emailInput" aria-describedby="emailHelp" required>
+                <label for="exampleInputEmail1" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="emailInput" aria-describedby="emailHelp" required>
             </div>
             <fieldset disabled>
                 <div class="input-group">
                     <span class="input-group-text">First and last name</span>
-                    <input type="text" aria-label="First name" class="form-control" id="nameInput">
-                    <input type="text" aria-label="Last name" class="form-control" id="surnameInput">
+                    <input type="text" aria-label="First name" class="form-control" id="nameInput" required>
+                    <input type="text" aria-label="Last name" class="form-control" id="surnameInput" required>
                 </div>
             </fieldset>
 
             <div class="input-group mb-3" style="margin-top: 1rem;">
                 <input type="text" class="form-control" placeholder="Numero carta di credito" required>
             </div>
-              
+
             <div class="input-group mb-3">
                 <input type="month" class="form-control" required>
                 <span class="input-group-text">-</span>
                 <input type="tel" class="form-control" placeholder="CVV" required maxlength="3">
             </div>
-              
+
             <div class="input-group">
                 <span class="input-group-text">Intestatario</span>
                 <input id="cardName" type="text" aria-label="First name" class="form-control" required>
                 <input id="cardSurname" type="text" aria-label="Last name" class="form-control" required>
             </div>
-            
-            <button id="registraDominio" type="submit" class="btn btn-primary" style="margin-top: 1rem;">Registra dominio</button>
+
+            <button id="registraDominio" type="submit" class="btn btn-primary" style="margin-top: 1rem;">Registra
+                dominio</button>
         </form>
     </div>
 
     <center>
         <h6 id="erroreTxt" style="color: red; margin-top: 1rem;"></h6>
     </center>
-    
+
     <script src="script.js"></script>
     <script>
         let price;
         window.onload = init();
 
-      async function procediAcquisto(){
-        let domainName = document.getElementById("domainName").value;
+        async function procediAcquisto() {
+            let domainName = document.getElementById("domainName").value;
 
-        let response = await getDomain(domainName, false);
+            if(!domainName.endsWith('.it')){
+                document.getElementById("erroreTxt").innerText = 'La stringa inserita non è un dominio .it!';
+                return
+            }
 
-        if(response === "DISPONIBILE"){
-            var timerInterval = setInterval(startTimer, 1000);
-            price = (domainName.length + 1);
-            document.getElementById("prezzo").innerText = "Prezzo: €" + price;
-            document.getElementById("continuaBtn").disabled = true;
-            document.getElementById("inputForm").style.display = "block";
-            document.getElementById("erroreTxt").innerText = "";
-        }else{
-            document.getElementById("erroreTxt").innerText = response;
-        }
-      }
+            let response = await getDomain(domainName, false);
 
-      async function ottieniNomeCognome(){
-        let email = document.getElementById("emailInput").value;
-
-        if(email){
-            let response = await getUser(email);
-
-            //Se è errore
-            if (typeof response === 'string' || response instanceof String){
-                document.getElementById("erroreTxt").innerText = response;
-            }else{
-                //Se è non errore
-                document.getElementById("nameInput").value = response["name"];
-                document.getElementById("surnameInput").value = response["surname"];
-                document.getElementById("cardName").value = response["name"];
-                document.getElementById("cardSurname").value = response["surname"];
+            if (response === "DISPONIBILE") {
+                var timerInterval = setInterval(startTimer, 1000);
+                price = (domainName.length + 1);
+                document.getElementById("prezzo").innerText = "Prezzo: €" + price;
+                document.getElementById("continuaBtn").disabled = true;
+                document.getElementById("inputForm").style.display = "block";
                 document.getElementById("erroreTxt").innerText = "";
+            } else {
+                document.getElementById("erroreTxt").innerText = response;
             }
         }
-      }
 
-      async function registraDominio(){
-        let durata = document.getElementById("selectDurata").value
-        let domainName = document.getElementById("domainName").value
-        let emailInput = document.getElementById("emailInput").value
+        async function ottieniNomeCognome() {
+            let email = document.getElementById("emailInput").value;
 
-        var today = new Date();
-        var dd = String(today.getDate()).padStart(2, '0');
-        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-        var yyyy = today.getFullYear();
-        today = yyyy + '-' + mm + '-' + dd;
+            if (email) {
+                let response = await getUser(email);
 
-        expired = (yyyy + parseInt(durata)) + '-' + mm + '-' + (dd - 1);
-
-        // Costruisco l'oggetto.
-        let domain = {
-            domainName: domainName,
-            userEmail: emailInput,
-            registrationDate: today,
-            expirationDate: expired
+                console.log(response)
+                //Se è errore
+                if (typeof response === 'string' || response instanceof String) {
+                    document.getElementById("erroreTxt").innerText = response;
+                    document.getElementById("registraDominio").disabled = true
+                } else {
+                    //Se è non errore
+                    document.getElementById("nameInput").value = response["name"];
+                    document.getElementById("surnameInput").value = response["surname"];
+                    document.getElementById("cardName").value = response["name"];
+                    document.getElementById("cardSurname").value = response["surname"];
+                    document.getElementById("erroreTxt").innerText = "";
+                    document.getElementById("registraDominio").disabled = false
+                }
+            }
         }
-        
-        let response = await postDomain(domain);
 
-        if(response === "OK"){
-            //Ora aggiungo l'ordine
-            let order = {
-                id: emailInput + "-" + Date.now(),
+        async function registraDominio() {
+            let durata = document.getElementById("selectDurata").value
+            let domainName = document.getElementById("domainName").value
+            let emailInput = document.getElementById("emailInput").value
+
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var yyyy = today.getFullYear();
+            today = yyyy + '-' + mm + '-' + dd;
+
+            expired = (yyyy + parseInt(durata)) + '-' + mm + '-' + (dd - 1);
+
+            // Costruisco l'oggetto.
+            let domain = {
+                domainName: domainName,
                 userEmail: emailInput,
-                domain: domainName,
-                registration: true,
-                paid: (domainName.length + parseInt(durata)),
-                orderDate: today
+                registrationDate: today,
+                expirationDate: expired
             }
 
-            console.log(order);
+            let response = await postDomain(domain);
 
-            let response = await postOrder(emailInput, order);
+            if (response === "OK") {
+                //Ora aggiungo l'ordine
+                let order = {
+                    id: emailInput + "-" + Date.now(),
+                    userEmail: emailInput,
+                    domain: domainName,
+                    registration: true,
+                    paid: (domainName.length + parseInt(durata)),
+                    orderDate: today
+                }
 
-            if(response === "OK"){
-                window.location.href = 'index.html';
-            }else{
+                console.log(order);
+
+                let response = await postOrder(emailInput, order);
+
+                if (response === "OK") {
+                    window.location.href = 'index.html';
+                } else {
+                    document.getElementById("erroreTxt").innerText = "ERROR: " + response;
+                }
+
+
+            } else {
                 document.getElementById("erroreTxt").innerText = "ERROR: " + response;
             }
-
-            
-        }else{
-            document.getElementById("erroreTxt").innerText = "ERROR: " + response;
         }
-      }
 
-      async function changePrice(){
-        let anni = document.getElementById("selectDurata").value;
-        let domainName = document.getElementById("domainName").value;
-        price = (domainName.length + 1);
-        document.getElementById("prezzo").innerText = "Prezzo: €" + (domainName.length + parseInt(anni));
-      }
+        async function changePrice() {
+            let anni = document.getElementById("selectDurata").value;
+            let domainName = document.getElementById("domainName").value;
+            price = (domainName.length + 1);
+            document.getElementById("prezzo").innerText = "Prezzo: €" + (domainName.length + parseInt(anni));
+        }
 
-      async function init() {
-        
-        document.getElementById("continuaBtn")
-            .addEventListener("click", () => {
-                procediAcquisto()
-            });
+        async function init() {
 
-        document.getElementById("emailInput")
-            .addEventListener("blur", () => {
-                ottieniNomeCognome();
-            });
+            document.getElementById("continuaBtn")
+                .addEventListener("click", () => {
+                    procediAcquisto()
+                });
 
-            
-        document.getElementById('form')
-        .addEventListener('submit', event => {
-            event.preventDefault();
-            
-            registraDominio();
-        });
+            document.getElementById("emailInput")
+                .addEventListener("blur", () => {
+                    ottieniNomeCognome();
+                });
 
-        
 
-        document.getElementById("selectDurata")
-            .addEventListener('change', () => {
-                changePrice();
-            });
-      }
+            document.getElementById('form')
+                .addEventListener('submit', event => {
+                    event.preventDefault();
+
+                    registraDominio();
+                });
+
+
+
+            document.getElementById("selectDurata")
+                .addEventListener('change', () => {
+                    changePrice();
+                });
+
+            document.getElementById("homeBtn")
+                .addEventListener('click', () => {
+                    window.location.href = 'index.html'
+                });
+
+        }
 
     </script>
-  </body>
+</body>
+
 </html>

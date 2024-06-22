@@ -1,7 +1,5 @@
 package it.unimib.sd2024;
 
-import java.io.StringReader;
-
 import javax.json.JsonObject;
 import javax.json.bind.Jsonb;
 import javax.json.bind.JsonbBuilder;
@@ -34,6 +32,7 @@ public class Document{
         this.jsonData = jsonData;
     }
 
+    //Usato per operazioni su attributi del json object
     public JsonObject getJsonObject() {
         Jsonb jsonb = JsonbBuilder.create();
         try {

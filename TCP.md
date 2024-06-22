@@ -1,16 +1,60 @@
-# Progetto Sistemi Distribuiti 2023-2024 - TCP
+# Documentazione del Protocollo TCP
 
-Documentare qui il protocollo su socket TCP che espone il database.
+## Introduzione
 
-Come scritto anche nel documento di consegna del progetto, si ha completa libertà su come implementare il protoccolo e i comandi del database. Alcuni suggerimenti sono:
+Il protocollo TCP qui descritto espone un database che supporta diverse operazioni. Il protocollo è progettato in modo testuale, simile a quello di Redis, per facilitarne l'implementazione.
 
-1. Progettare un protocollo testuale (tipo HTTP), è più semplice da implementare anche se meno efficiente.
-2. Dare un'occhiata al protocollo di [Redis](https://redis.io/docs/reference/protocol-spec/). Si può prendere ispirazione anche solo in alcuni punti.
+## Porta di Ascolto
 
-Di solito il protoccolo e i comandi del database sono due cose diverse. Tuttavia per il progetto, per evitare troppa complessità, si può documentare insieme il protocollo e i comandi implementati nel database.
+Il server ascolta sulla porta `3030`.
 
-La documentazione può variare molto in base al tipo di protocollo che si vuole costruire:
+## Formato delle Richieste
 
-* Se è un protocollo testuale simile a quello di Redis, è necessario indicare il formato delle richieste e delle risposte, sia dei comandi sia dei dati.
+Le richieste sono inviate come stringhe di testo con comandi e argomenti separati da spazi. I comandi supportati sono:
+- `GET`
+- `CREATE`
+- `EDIT`
 
-* Se è un protocollo binario, è necessario specificare bene il formato di ogni pacchetto per le richieste e per le risposte, come vengono codificati i comandi e i dati.
+## GET
+
+Il comando `GET` viene utilizzato per ottenere informazioni dal database. 
+
+Formato:
+
+***GET*** `tipo` `id`
+
+Esempio: GET user <samper@gmail.com>
+
+### Estensioni
+
+ - ***GET*** domains `userEmail` restituisce tutti i domini registrati dall'utente specificato
+ - ***GET*** domain `domainName` `domainAttribute` restituisce il valore dell'attributo selezionato per un dominio specifico
+ - ***GET*** orders `userEmail` restituisce tutti gli ordini di un utente specifico
+- ***GET*** user `userEmail` restitusce un utente specifico
+
+
+
+## CREATE
+
+Il comando `CREATE` viene utilizzato per creare nuove entità nel database.
+
+Formato:
+
+***CREATE*** `tipo` `id` `jsonData`
+
+Esempio: CREATE user <samper@gmail.com> `{"email":"samper@gmail.com","name":"Samuele","surname":"Perotti"}`
+
+
+
+## EDIT
+
+Il comando `EDIT` viene utilizzato per modificare le entità esistenti nel database.
+
+Formato:
+
+***EDIT*** `tipo` `id` `proprieta` `newValue`
+
+
+## Formato delle Risposte
+
+Le risposte sono inviate come stringhe di testo. Ogni risposta termina con `END` per indicare la fine della trasmissione.

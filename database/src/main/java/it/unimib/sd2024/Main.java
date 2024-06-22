@@ -1,14 +1,6 @@
 package it.unimib.sd2024;
 
 import java.net.*;
-import java.time.LocalDate;
-
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.json.bind.Jsonb;
-import javax.json.bind.JsonbBuilder;
-
 import java.io.*;
 
 
@@ -116,6 +108,18 @@ public class Main {
                             
                             case "order":
                                 out.println(Database.addOrder(parts[2], parts[3]));
+                                out.println("END");
+                                break;
+                        
+                            default:
+                                break;
+                        }
+                        break;
+
+                    case "EDIT":
+                        switch (parts[1]) {
+                            case "domain":
+                                out.println(Database.editDomain(parts[2], parts[3], parts[4]));
                                 out.println("END");
                                 break;
                         

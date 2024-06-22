@@ -1,7 +1,6 @@
 package it.unimib.sd2024.Entities;
 
 import java.time.LocalDate;
-import java.util.Objects;
 
 public class Domain{
     private String domainName;

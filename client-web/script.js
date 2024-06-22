@@ -4,6 +4,27 @@ var timeLimitInMinutes = 3;
 var timeLimitInSeconds = timeLimitInMinutes * 60;
 var timerElement = document.getElementById('timer');
 
+async function renewDomain(domainName, newExpirationDate) {
+    const endpoint = `${API_URI}/domains/${domainName}/expirationDate/`;
+
+    try {
+        const response = await fetch(endpoint, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newExpirationDate)
+        });
+
+        if (!response.ok)
+            return "ERROR";
+
+        return "OK";
+    } catch (error) {
+        onError(`Impossibile eseguire la richiesta POST "${endpoint}"`, error);
+    }
+}
+
 // Effettua la chiamata GET "/domains" e restituisce l'elenco dei domini.
 async function getDomains() {
     const endpoint = `${API_URI}/domains`;
@@ -15,9 +36,9 @@ async function getDomains() {
             throw new Error(`Risposta GET "${endpoint}" con errore: ${response.status} ${response.statusText}`);
 
         return await response.json();
-    } catch(error) {
+    } catch (error) {
         onError(`Impossibile eseguire la richiesta GET "${endpoint}"`, error);
-    }   
+    }
 }
 
 async function getUserDomains(userEmail) {
@@ -30,9 +51,9 @@ async function getUserDomains(userEmail) {
             throw new Error(`Risposta GET "${endpoint}" con errore: ${response.status} ${response.statusText}`);
 
         return await response.json();
-    } catch(error) {
+    } catch (error) {
         onError(`Impossibile eseguire la richiesta GET "${endpoint}"`, error);
-    }   
+    }
 }
 
 
@@ -46,45 +67,45 @@ async function getOrders(userEmail) {
             throw new Error(`Risposta GET "${endpoint}" con errore: ${response.status} ${response.statusText}`);
 
         return await response.json();
-    } catch(error) {
+    } catch (error) {
         onError(`Impossibile eseguire la richiesta GET "${endpoint}"`, error);
-    }   
+    }
 }
 
 
 async function getDomain(domainName, verbose) {
     const endpoint = `${API_URI}/domains/` + domainName + '?verbose=' + verbose;
 
-    if(verbose){
+    if (verbose) {
         try {
             let response = await fetch(endpoint);
-    
+
             if (!response.ok)
                 return "DISPONIBILE";
-    
+
             return await response.json();
-        } catch(error) {
+        } catch (error) {
             onError(`Impossibile eseguire la richiesta GET "${endpoint}"`, error);
-        }   
-    }else{
+        }
+    } else {
         try {
             let response = await fetch(endpoint);
-    
+
             if (!response.ok)
                 return "DISPONIBILE";
-    
-            return "ERRORE: Impossibile effettuare l'acquisto ora!\n"+ 
-            "Il dominio è già registrato da un altro utente o un utente lo sta registrando "+ 
-            "in questo momento";
-        } catch(error) {
+
+            return "ERRORE: Impossibile effettuare l'acquisto ora!\n" +
+                "Il dominio è già registrato da un altro utente o un utente lo sta registrando " +
+                "in questo momento";
+        } catch (error) {
             onError(`Impossibile eseguire la richiesta GET "${endpoint}"`, error);
-        } 
+        }
     }
 
-      
+
 }
 
-async function getUser(email){
+async function getUser(email) {
     const endpoint = `${API_URI}/users/` + email;
 
     try {
@@ -94,73 +115,73 @@ async function getUser(email){
             return "ERRORE: Non esiste un account associato a questa email";
 
         return await response.json();
-    } catch(error) {
+    } catch (error) {
         onError(`Impossibile eseguire la richiesta GET "${endpoint}"`, error);
-    }   
+    }
 }
 
-async function postUser(user){
+async function postUser(user) {
     const endpoint = `${API_URI}/users/`;
 
     try {
         const response = await fetch(endpoint, {
             method: "POST",
             headers: {
-              "Content-Type": "application/json",
+                "Content-Type": "application/json",
             },
             body: JSON.stringify(user)
-          });
-    
-          if (!response.ok)
+        });
+
+        if (!response.ok)
             return "An account already exists with this email";
-    
-          // Fa lo split e restituisce l'ultima sottostringa, che è l'ID.
-          return "OK";
-    } catch(error) {
+
+        // Fa lo split e restituisce l'ultima sottostringa, che è l'ID.
+        return "OK";
+    } catch (error) {
         onError(`Impossibile eseguire la richiesta POST "${endpoint}"`, error);
     }
 }
 
-async function postOrder(userEmail, order){
+async function postOrder(userEmail, order) {
     const endpoint = `${API_URI}/users/` + encodeURIComponent(userEmail) + "/orders";
 
     try {
         const response = await fetch(endpoint, {
             method: "POST",
             headers: {
-              "Content-Type": "application/json",
+                "Content-Type": "application/json",
             },
             body: JSON.stringify(order)
-          });
-    
-          if (!response.ok)
+        });
+
+        if (!response.ok)
             throw error
-    
-          // Fa lo split e restituisce l'ultima sottostringa, che è l'ID.
-          return "OK";
-    } catch(error) {
+
+        // Fa lo split e restituisce l'ultima sottostringa, che è l'ID.
+        return "OK";
+    } catch (error) {
         onError(`Impossibile eseguire la richiesta POST "${endpoint}"`, error);
     }
 }
 
-async function postDomain(domain){
+async function postDomain(domain) {
     const endpoint = `${API_URI}/domains/`;
 
     try {
         const response = await fetch(endpoint, {
             method: "POST",
             headers: {
-              "Content-Type": "application/json",
+                "Content-Type": "application/json",
             },
             body: JSON.stringify(domain)
-          });
-    
-          if (!response.ok)
+        });
+
+        if (!response.ok)
             return "A domain already exists";
-    
-          // Fa lo split e restituisce l'ultima sottostringa, che è l'ID.
-          return "OK";
-    } catch(error) {
+
+        // Fa lo split e restituisce l'ultima sottostringa, che è l'ID.
+        return "OK";
+    } catch (error) {
         onError(`Impossibile eseguire la richiesta POST "${endpoint}"`, error);
     }
 }
@@ -185,16 +206,16 @@ function startTimer() {
         clearInterval(timerInterval);
         return;
     }
-    
+
     minutes = '0' + minutes;
-  
+
     if (seconds < 10) {
         seconds = '0' + seconds;
     }
 
     timerElement.textContent = minutes + ':' + seconds;
 
-    if(parseInt(minutes) === 0 && parseInt(seconds) === 0){
+    if (parseInt(minutes) === 0 && parseInt(seconds) === 0) {
         window.location.href = "registraDominio.html";
     }
 }
