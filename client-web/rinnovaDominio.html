@@ -65,11 +65,14 @@
 <script>
     window.onload = init();
 
+    //Aggiunge gli anni passati alla data e la restituisce
     function addYears(date, years) {
         date.setFullYear(parseInt(date.getFullYear()) + parseInt(years));
         return date;
     }
 
+    //Chiama renewDomain per effetuare una chiamata PUT al server per modificare la data
+    //di scadenza del dominio e poi crea e invia l'ordine di tipo rinnovo legato al dominio
     async function rinnovaDominio() {
         let durata = document.getElementById("selectDurata").value
         let domainName = localStorage.getItem("domainName")
@@ -109,11 +112,10 @@
         } else {
             document.getElementById("erroreTxt").innerText = "ERROR: " + response;
         }
-
-
-
     }
 
+    //Modifica dinamicamente il prezzo mostrato a schermo quando viene
+    //cambiata la durata del periodo 
     async function changePrice() {
         let anni = document.getElementById("selectDurata").value;
         let domainName = localStorage.getItem("domainName");
@@ -121,6 +123,8 @@
         document.getElementById("prezzo").innerText = "Prezzo: €" + (domainName.length + parseInt(anni));
     }
 
+    //Ottiene nome e cognome dell'utente specificato dalla mail inserita
+    //Serve per l'autocompletamento di nome cognome e intestario carta (modificabile)
     async function ottieniNomeCognome() {
         let email = document.getElementById("emailInput").value;
 
@@ -140,6 +144,7 @@
         }
     }
 
+    //Crea e riempie la select in base a quanti anni mancano alla scadenza
     async function createSelect() {
         let selectTag = document.getElementById('selectDurata');
         let expirationDate = localStorage.getItem("expirationDate");

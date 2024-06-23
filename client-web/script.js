@@ -4,6 +4,7 @@ var timeLimitInMinutes = 3;
 var timeLimitInSeconds = timeLimitInMinutes * 60;
 var timerElement = document.getElementById('timer');
 
+//Effettua chiamata PUT per modificare la data di scadenza del dominio domainName
 async function renewDomain(domainName, newExpirationDate) {
     const endpoint = `${API_URI}/domains/${domainName}/expirationDate/`;
 
@@ -41,6 +42,7 @@ async function getDomains() {
     }
 }
 
+//Effettua chiamata GET per recuperare tutti i domini di cui l'utente "userEmail" è proprietario
 async function getUserDomains(userEmail) {
     const endpoint = `${API_URI}/users/` + userEmail + '/domains';
 
@@ -56,7 +58,7 @@ async function getUserDomains(userEmail) {
     }
 }
 
-
+//Effettua chiamata GET recuperare tutti gli ordini dell utente userEmail
 async function getOrders(userEmail) {
     const endpoint = `${API_URI}/users/` + userEmail + '/orders';
 
@@ -72,10 +74,11 @@ async function getOrders(userEmail) {
     }
 }
 
-
+//Effettua chiamata GET per recuperare informazioni del dominio "domainName"
 async function getDomain(domainName, verbose) {
     const endpoint = `${API_URI}/domains/` + domainName + '?verbose=' + verbose;
 
+    //Verbose true, restituisce tutte le info del dominio
     if (verbose) {
         try {
             let response = await fetch(endpoint);
@@ -87,6 +90,8 @@ async function getDomain(domainName, verbose) {
         } catch (error) {
             onError(`Impossibile eseguire la richiesta GET "${endpoint}"`, error);
         }
+
+    //Verbose false, restituisce solo se è già presente o meno (quindi disponibile)
     } else {
         try {
             let response = await fetch(endpoint);
@@ -101,10 +106,9 @@ async function getDomain(domainName, verbose) {
             onError(`Impossibile eseguire la richiesta GET "${endpoint}"`, error);
         }
     }
-
-
 }
 
+//Effettua chiamata GET per recuperare info dell utente "email"
 async function getUser(email) {
     const endpoint = `${API_URI}/users/` + email;
 
@@ -120,6 +124,7 @@ async function getUser(email) {
     }
 }
 
+//Effettua chiamata POST per creare l'utente User
 async function postUser(user) {
     const endpoint = `${API_URI}/users/`;
 
@@ -142,6 +147,7 @@ async function postUser(user) {
     }
 }
 
+//Effettua chiamata POST per creare l'ordine order e legarlo all'utente "userEmail"
 async function postOrder(userEmail, order) {
     const endpoint = `${API_URI}/users/` + encodeURIComponent(userEmail) + "/orders";
 
@@ -164,6 +170,7 @@ async function postOrder(userEmail, order) {
     }
 }
 
+//Effettua chiamata POST creare il dominio "domain"
 async function postDomain(domain) {
     const endpoint = `${API_URI}/domains/`;
 
@@ -186,6 +193,7 @@ async function postDomain(domain) {
     }
 }
 
+//Non mi ricordo se l'ho usata ma ho paura di rimuoverla
 function isJson(str) {
     try {
         JSON.parse(str);
@@ -195,7 +203,7 @@ function isJson(str) {
     return true;
 }
 
-
+//Fa partire il timer di 3 minuti, un po EXTRA ma carino da vedere
 function startTimer() {
     timeLimitInSeconds--;
     var minutes = Math.floor(timeLimitInSeconds / 60);

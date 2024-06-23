@@ -94,6 +94,7 @@
         let price;
         window.onload = init();
 
+        //Chiede al server se il dominio è libero e disponibile per l'acquisto
         async function procediAcquisto() {
             let domainName = document.getElementById("domainName").value;
 
@@ -116,6 +117,8 @@
             }
         }
 
+        //Ottiene nome e cognome dell'utente specificato dalla mail inserita
+        //Serve per l'autocompletamento di nome cognome e intestario carta (modificabile)
         async function ottieniNomeCognome() {
             let email = document.getElementById("emailInput").value;
 
@@ -139,6 +142,9 @@
             }
         }
 
+        //Chiama postDomain per effettuare una chiamata post al server per aggiungere il dominio
+        //Inoltre chiama postOrder per effettuare una chiamate post al server per creare un ordine
+        //  relativo al dominio
         async function registraDominio() {
             let durata = document.getElementById("selectDurata").value
             let domainName = document.getElementById("domainName").value
@@ -189,6 +195,8 @@
             }
         }
 
+        //Modifica dinamicamente il prezzo mostrato a schermo quando viene
+        //cambiata la durata del periodo 
         async function changePrice() {
             let anni = document.getElementById("selectDurata").value;
             let domainName = document.getElementById("domainName").value;

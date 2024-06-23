@@ -32,6 +32,8 @@
   <script>
     window.onload = init();
 
+    //Crea l'oggetto json rappresentante un utente e chiama postUser per effettuare una 
+    //chiamata post al server per creare l'utente
     async function registraUtente() {
       let email = document.getElementById("emailInput").value;
       let name = document.getElementById("nameInput").value;
