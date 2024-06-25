@@ -22,6 +22,7 @@ public class Database {
         caricaDaFile();
     }
 
+    //Carica un po di dati per rendere utilizzabile subito il sito
     public static void caricaDaFile(){
         String csvFile = "sampleData.csv";
         String line = "";
@@ -57,6 +58,7 @@ public class Database {
         }
     }
 
+    //Restituisce una lista di documenti che hanno un'attributo passato uguale al valore passato
     public static List<Document> findDocumentsByAttribute(ConcurrentHashMap<String, Document> collection, String attribute, String value) {
         List<Document> matchingDocuments = new ArrayList<>();
         for (Document doc : collection.values()) {
@@ -74,6 +76,7 @@ public class Database {
         return jsonValue != null ? jsonValue.toString() : null;
     }
 
+    //Modifica il valore di un attributo di un Jsonobject
     private static JsonObject modifyAttribute(JsonObject jsonObject, String attributeName, Object newValue) {
         JsonObjectBuilder builder = Json.createObjectBuilder();
 
@@ -91,6 +94,7 @@ public class Database {
         return builder.build();
     }
 
+    //Restituisce un array json contenente tutti i domini registrati
     public static String getAllDomains(){
         JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
                             
@@ -106,6 +110,8 @@ public class Database {
         return combinedJson.toString();
     }
 
+    //Restituisce tutti i domini di cui user "userEmail" è proprietario sottoforma di
+    //array json
     public static String getUserDomains(String userEmail){
         JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
         
@@ -121,6 +127,8 @@ public class Database {
         return combinedJson.toString();
     }
 
+    //Modifica il valore dell'attributo passato del dominio specificato da domainName
+    //(usato per expirationDate)
     public static String editDomain(String domainName, String attribute, String value){
         Document domain = domainsCollection.get(domainName);
 
@@ -135,6 +143,7 @@ public class Database {
         }
     }
 
+    //Restituisce un array json contente tutti gli utenti
     public static String getAllUsers(){
         JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
                 
@@ -146,6 +155,7 @@ public class Database {
         return combinedJson.toString();
     }
 
+    //Restituisce tutti gli ordini dell utente specificato da userEmail
     public static String getAllOrders(String userEmail){
         JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
         
@@ -185,6 +195,7 @@ public class Database {
         }
     }
 
+    //Restituisce il json rappresentante l'oggetto user identificato dall email passata
     public static String getUser(String email){
         Document user = usersCollection.get(email);
 
@@ -195,6 +206,7 @@ public class Database {
         }
     }
 
+    //Restituisce il valore dell'attributo passato del dominio specificato da domainName
     public static String getDomainAttribute(String domainName, String attribute){
         Document domain = domainsCollection.get(domainName);
         
@@ -205,6 +217,7 @@ public class Database {
         }
     }
 
+    //Aggiunge un utente alla collection userCollection (viene creato un oggetto di tipo document)
     public static String addUser(String userEmail, String jsonStringUser){
         if(!usersCollection.containsKey(userEmail)){
             usersCollection.put(userEmail, 
@@ -215,12 +228,14 @@ public class Database {
         }
     }
 
+    //Aggiunge un dominio alla collection domainsCollection (viene creato un oggetto di tipo document)
     public static String addDomain(String domainName, String jsonStringDomain){
         Document doc =  new Document(domainName, jsonStringDomain);
         domainsCollection.put(domainName, doc);
         return "OK";
     }
 
+    //Aggiunge un ordine alla collection ordersCollection (viene creato un oggetto di tipo document)
     public static String addOrder(String idOrder, String jsonStringOrder){
         Document doc =  new Document(idOrder, jsonStringOrder);
         ordersCollection.put(idOrder, doc);

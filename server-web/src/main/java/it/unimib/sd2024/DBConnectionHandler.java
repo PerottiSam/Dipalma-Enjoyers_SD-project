@@ -6,7 +6,11 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+/**
+ * Classe che contiene metodi statici per connettersi e comunicare con il DB
+ */
 public class DBConnectionHandler {
+	
 	private static String readFromServer(BufferedReader br) throws IOException {
 		StringBuilder responseBuilder = new StringBuilder();
         String line;

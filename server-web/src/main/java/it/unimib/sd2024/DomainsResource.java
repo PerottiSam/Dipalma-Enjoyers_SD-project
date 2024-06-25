@@ -27,6 +27,7 @@ import jakarta.ws.rs.core.Response.Status;
 public class DomainsResource {
     static private Map<String, LocalDateTime> domainsInUse = new ConcurrentHashMap<String, LocalDateTime>();
 
+    
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String getDomains() {
