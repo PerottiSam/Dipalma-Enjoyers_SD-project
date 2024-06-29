@@ -27,13 +27,25 @@ import jakarta.ws.rs.core.Response.Status;
 public class DomainsResource {
     static private Map<String, LocalDateTime> domainsInUse = new ConcurrentHashMap<String, LocalDateTime>();
 
-    
+    /**
+     * Gestisce le richieste GET per recuperare tutti i domini.
+     * 
+     * @return una stringa JSON che rappresenta tutti i domini.
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String getDomains() {
         return DBConnectionHandler.sendMessageToDB("GET domains");
     }
 
+    /**
+     * Gestisce le richieste PUT per aggiornare una specifica proprietà di un dominio.
+     * 
+     * @param domainName il nome del dominio da aggiornare.
+     * @param property   la proprietà da aggiornare.
+     * @param body       il nuovo valore per la proprietà.
+     * @return una Response che indica il risultato dell'operazione.
+     */
     @Path("/{domainName}/{property}")
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
@@ -57,6 +69,14 @@ public class DomainsResource {
         }
     }
 
+
+    /**
+     * Gestisce le richieste GET per recuperare informazioni su un dominio specifico.
+     * 
+     * @param domainName il nome del dominio da recuperare.
+     * @param verbose    se includere informazioni dettagliate.
+     * @return una Response con le informazioni sul dominio.
+     */
     @Path("/{domainName}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -77,6 +97,12 @@ public class DomainsResource {
         }
     }
 
+     /**
+     * Metodo helper per recuperare informazioni non verbose su un dominio.
+     * 
+     * @param domainName il nome del dominio da recuperare.
+     * @return una Response con le informazioni sul dominio.
+     */        
     public Response getDomainNonVerbose(String domainName) {
         String response = DBConnectionHandler.sendMessageToDB("GET domain " + domainName + " expirationDate");
         LocalDateTime now = LocalDateTime.now();
@@ -126,6 +152,12 @@ public class DomainsResource {
         }
     }
 
+    /**
+     * Gestisce le richieste POST per aggiungere un nuovo dominio.
+     * 
+     * @param domain il dominio da aggiungere.
+     * @return una Response che indica il risultato dell'operazione.
+     */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addDomain(Domain domain) {

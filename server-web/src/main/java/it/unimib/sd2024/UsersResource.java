@@ -18,8 +18,10 @@ import jakarta.ws.rs.core.Response.Status;
 
 @Path("users")
 public class UsersResource {
-    /*
-     * Implementa GET "/users".
+    /**
+     * Gestisce le richieste GET per recuperare tutti gli utenti.
+     * 
+     * @return una stringa JSON che rappresenta tutti gli utenti.
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -27,8 +29,11 @@ public class UsersResource {
         return DBConnectionHandler.sendMessageToDB("GET users");
     }
 
-    /*
-     * Implementa GET "/users".
+    /**
+     * Gestisce le richieste GET per recuperare tutti gli ordini di un utente specifico.
+     * 
+     * @param email l'email dell'utente di cui recuperare gli ordini.
+     * @return una stringa JSON che rappresenta gli ordini dell'utente.
      */
     @Path("/{email}/orders")
     @GET
@@ -37,8 +42,11 @@ public class UsersResource {
         return DBConnectionHandler.sendMessageToDB("GET orders " + email);
     }
 
-    /*
-     * Implementa GET.
+    /**
+     * Gestisce le richieste GET per recuperare tutti i domini di un utente specifico.
+     * 
+     * @param email l'email dell'utente di cui recuperare i domini.
+     * @return una stringa JSON che rappresenta i domini dell'utente.
      */
     @Path("/{email}/domains")
     @GET
@@ -47,6 +55,12 @@ public class UsersResource {
         return DBConnectionHandler.sendMessageToDB("GET domains " + email);
     }
 
+    /**
+     * Gestisce le richieste GET per recuperare informazioni su un utente specifico.
+     * 
+     * @param email l'email dell'utente da recuperare.
+     * @return una Response con le informazioni sull'utente.
+     */
     @Path("/{email}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -63,7 +77,10 @@ public class UsersResource {
     }
 
     /**
-     * Implementazione di POST "/users".
+     * Gestisce le richieste POST per aggiungere un nuovo utente.
+     * 
+     * @param user l'utente da aggiungere.
+     * @return una Response che indica il risultato dell'operazione.
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -89,7 +106,11 @@ public class UsersResource {
     }
 
     /**
-     * Implementazione di POST "/users/{email}".
+     * Gestisce le richieste POST per aggiungere un nuovo ordine di un utente specifico.
+     * 
+     * @param email l'email dell'utente a cui aggiungere l'ordine.
+     * @param order l'ordine da aggiungere.
+     * @return una Response che indica il risultato dell'operazione.
      */
     @Path("/{email}/orders")
     @POST
